@@ -2,8 +2,10 @@ from control import *
 
 init = [20, 14, 5, 7, 1, 5]
 
+
 def init_pams():
     return init
+
 
 def finish_chain(inits):
     # w0 = tf(1, 1)
@@ -24,11 +26,10 @@ def finish_chain(inits):
     w6 = series(w5, w4)
     w7 = feedback(w6, w1, -1)
 
-
     return w7
 
-def calc_w():
 
+def calc_w():
     inits = init_pams()
     w = finish_chain(inits)
 

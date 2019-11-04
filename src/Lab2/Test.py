@@ -9,9 +9,12 @@ from src.Lab2 import initPamsLab2
 # w = initPamsLab2.finish_chain()
 # print(w)
 
+# key
+b = 4
 
-b = int(input("Input your desired analyze tool?\n 1 - transition function \n 2 - bode function \n"
-                  " 3 - Nyquist diagram \n 4 - Gurwitz criterion \n" " : "))
+
+# b = int(input("Input your desired analyze tool?\n 1 - transition function \n 2 - bode function \n"
+#                   " 3 - Nyquist diagram \n 4 - Gurwitz criterion \n" " : "))
 
 dictionary_of_choice = {
     1: toolBox.trans_func,
