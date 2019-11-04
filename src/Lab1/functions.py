@@ -3,19 +3,20 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from control.matlab import *
-import pams
+from src.Lab1 import initPamsLab1
 import control.matlab as ctr
 
-numer = pams.init_pam()[0]
-denumer = pams.init_pam()[1]
-numer2 = pams.init_pam()[2]
-denumer2 = pams.init_pam()[3]
+numer = initPamsLab1.init_pam()[0]
+denumer = initPamsLab1.init_pam()[1]
+numer2 = initPamsLab1.init_pam()[2]
+denumer2 = initPamsLab1.init_pam()[3]
 
 t = np.linspace(0, stop=50, num=1000)
 
 y1 = 0; y2 = 0;
 
 ln = [y1, y2]
+
 
 
 def trans_func(a):

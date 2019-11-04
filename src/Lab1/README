@@ -1,0 +1,13 @@
+Code final version 1.0 I rebuilded this repository again because of my crooked hands
+
+so there is no available differencies while working on the project
+
+Shortly about files:
+
+Start.py - main file that switch on the programm;
+
+pams.py - file with initial matrix data that r used in program;
+
+mainmotion.py - file acting with user and chooses switches dependently on user inputing;
+
+functions.py - file with functions obviously.

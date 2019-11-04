@@ -1,6 +1,6 @@
 " function with main active motion"
 
-import functions
+from src.Lab1 import functions
 
 
 def graf():
