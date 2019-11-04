@@ -36,7 +36,7 @@ def nyquist_diagram(w):
     plt.title('Nyquist Diagram')
     plt.plot()
     plt.show()
-
+    #
     return
 
 def poles_analaze(w):
