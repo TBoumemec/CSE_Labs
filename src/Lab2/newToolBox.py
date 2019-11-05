@@ -8,6 +8,12 @@ import matplotlib.pyplot as plt
 from src.Lab2 import initPamsLab2
 
 
+"""
+Class let work with transition function(get_trans_func), analyzing of poles(get_poles_analyze),
+                    godoghraph plotting(get_godoghraph)
+
+"""
+
 class newToolBox:
 
     def __init__(self, w_f=initPamsLab2.calc_w()):
@@ -56,8 +62,8 @@ class newToolBox:
 
         plt.plot(x, y, "r")
         plt.title('Godograph')
-        plt.ylabel('X')
-        plt.xlabel('jY')
+        plt.ylabel('jY')
+        plt.xlabel('X')
         plt.grid(True)
         plt.show()
 

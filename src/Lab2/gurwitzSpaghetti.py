@@ -3,7 +3,6 @@ from numpy.linalg import det
 from numpy.ma import arange
 
 from src.Lab2 import initPamsLab2
-from src.Lab2 import toolBox
 from src.Lab2 import newToolBox
 from src.Lab2 import NyquistBode
 
@@ -42,23 +41,12 @@ def gurwitz_crit():
         w = initPamsLab2.finish_chain(initis)
         newToolBox.newToolBox.all_of_them(w)
         w1 = initPamsLab2.finish_for_nyquist(initis)
-        NyquistBode.Nyquist.all_of_them(w1)
-        # Nyquist.Nyquist.get_nyquist_diagram(w1)
-
-
-# def critical_number(init):
-#
-#     w = initPamsLab2.finish_chain(init)
-#
-#     num, denum = tfdata(w)
-#     # num = num[0][0][:]
-#     denum = denum[0][0][:]
+        NyquistBode.NyquistBode.all_of_them(w1)
 
 
 def formating_matrix(w):
 
     num, denum = tfdata(w)
-    # num = num[0][0][:]
     denum = denum[0][0][:]
 
     matrix = np.zeros((len(denum) - 1, len(denum) - 1))

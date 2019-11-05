@@ -1,13 +1,13 @@
 from control import *
 import matplotlib.pyplot as plt
-from control.matlab import step
-from numpy.linalg import det
-from numpy.ma import arange
-
 from src.Lab2 import initPamsLab2
-from src.Lab2 import dictionary
 
-class Nyquist:
+
+
+"""
+Class let work with nyquist diagram(def get_nyquist_diagram) and bode func(def get_bode_func)
+"""
+class NyquistBode:
 
     def __init__(self, w_f = initPamsLab2.calc_nyquist()):
         self.w = w_f
@@ -16,10 +16,17 @@ class Nyquist:
     def get_nyquist_diagram(self):
 
         real, imag, freq = nyquist(self.w, labelFreq=10, color='g')
+
+        # print(real, imag)
+        # for i in range(len(imag)):
+        #     print("real:", imag[i]) if -0.001 <= real[i] <= 0.001 else "no"
+
         plt.title('Nyquist Diagram')
         plt.plot()
+        # plt.Circle((0, 0), 1, color='r')
+        # plt.plot()
         plt.show()
-        #
+
         return
 
     def get_bode_func(self):
@@ -32,5 +39,5 @@ class Nyquist:
         return
 
     def all_of_them(self):
-        Nyquist(self).get_nyquist_diagram()
-        Nyquist(self).get_bode_func()
+        NyquistBode(self).get_nyquist_diagram()
+        NyquistBode(self).get_bode_func()

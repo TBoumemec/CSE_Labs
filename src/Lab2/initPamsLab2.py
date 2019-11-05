@@ -4,10 +4,20 @@ init = [20, 14, 5, 7, 1, 5]
 
 
 def init_pams():
+    """
+    just getter of initial pams
+    :return:
+    """
     return init
 
 
 def finish_chain(inits):
+    """
+
+    :param inits: gives a freedom in changing of init pams
+    :return: w6 is a finished chain
+    """
+
     # w0 = tf(1, 1)
 
     compW1 = [[inits[1], 1], [inits[5], 1]]
@@ -28,6 +38,11 @@ def finish_chain(inits):
     return w6
 
 def finish_for_nyquist(inits):
+    """
+    same as finish_chain but for unlocked CSU
+    :param inits: gives a freedom in changing of pams
+    :return: w6 is a finished chain
+    """
 
     compW1 = [[inits[1], 1], [inits[5], 1]]
     w1 = tf(compW1[0], compW1[1])
@@ -47,6 +62,10 @@ def finish_for_nyquist(inits):
 
 
 def calc_w():
+    """
+    fast calculation of finished chain with initial pams
+    :return:
+    """
     inits = init_pams()
     w = finish_chain(inits)
 
