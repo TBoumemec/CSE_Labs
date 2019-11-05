@@ -26,22 +26,9 @@ class newToolBox:
 
         return
 
-    def get_bode_func(self):
-        print(self.w)
-        mag, phase, omega = bode(self.w, dB=False)
-        plt.title("Frequency Response", y=2.2)
-        plt.plot()
-        plt.show()
 
-        return
 
-    def get_nyquist_diagram(self):
-        real, imag, freq = nyquist(self.w, labelFreq=10, color='g')
-        plt.title('Nyquist Diagram')
-        plt.plot()
-        plt.show()
-        #
-        return
+
 
     def get_poles_analyze(self):
         from control import pole
@@ -55,6 +42,7 @@ class newToolBox:
 
     def all_of_them(self):
         newToolBox(self).get_trans_func()
-        newToolBox(self).get_nyquist_diagram()
-        newToolBox(self).get_bode_func()
         newToolBox(self).get_poles_analyze()
+        newToolBox(self).get_poles_analyze()
+
+

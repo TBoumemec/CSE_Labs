@@ -5,6 +5,7 @@ from numpy.ma import arange
 from src.Lab2 import initPamsLab2
 from src.Lab2 import toolBox
 from src.Lab2 import newToolBox
+from src.Lab2 import NyquistBode
 
 
 def gurwitz_crit():
@@ -35,10 +36,15 @@ def gurwitz_crit():
 
     listA = [inits[1] - 5, inits[1], inits[1] + 5]
     for i in range(3):
+
         initis = initPamsLab2.init_pams()
         initis[1] = listA[i]
+        print(initis[1])
         w = initPamsLab2.finish_chain(initis)
         newToolBox.newToolBox.all_of_them(w)
+        w1 = initPamsLab2.finish_for_nyquist(initis)
+        NyquistBode.Nyquist.all_of_them(w1)
+        # Nyquist.Nyquist.get_nyquist_diagram(w1)
 
 
 # def critical_number(init):

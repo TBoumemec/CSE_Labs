@@ -2,6 +2,7 @@ from src.Lab2 import dictionary
 from src.Lab2 import toolBox
 from src.Lab2 import newToolBox
 from src.Lab2 import gurwitzSpaghetti
+from src.Lab2 import NyquistBode
 
 
 # key
@@ -14,8 +15,8 @@ b = 5
 
 dictionary_of_choice = {
         1: newToolBox.newToolBox().get_trans_func,
-        2: newToolBox.newToolBox().get_bode_func,
-        3: newToolBox.newToolBox().get_nyquist_diagram,
+        2: NyquistBode.Nyquist().get_bode_func,
+        3: NyquistBode.Nyquist().get_nyquist_diagram,
         4: newToolBox.newToolBox().all_of_them,
         5: gurwitzSpaghetti.gurwitz_crit,
     }
