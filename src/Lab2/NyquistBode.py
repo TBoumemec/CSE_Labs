@@ -14,7 +14,7 @@ class Nyquist:
         self.t = np.linspace(0, stop=50, num=1000)
 
     def get_nyquist_diagram(self):
-        print(self.w)
+
         real, imag, freq = nyquist(self.w, labelFreq=10, color='g')
         plt.title('Nyquist Diagram')
         plt.plot()
@@ -23,7 +23,7 @@ class Nyquist:
         return
 
     def get_bode_func(self):
-        print(self.w)
+
         mag, phase, omega = bode(self.w, dB=False)
         plt.title("Frequency Response", y=2.2)
         plt.plot()

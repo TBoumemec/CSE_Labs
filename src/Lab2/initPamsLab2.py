@@ -29,7 +29,6 @@ def finish_chain(inits):
 
 def finish_for_nyquist(inits):
 
-
     compW1 = [[inits[1], 1], [inits[5], 1]]
     w1 = tf(compW1[0], compW1[1])
 

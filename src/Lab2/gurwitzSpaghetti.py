@@ -33,10 +33,9 @@ def gurwitz_crit():
 
         print("det", opr, "Koc:", i) if - 2 <= opr <= 2 else "no"
 
-
     listA = [inits[1] - 5, inits[1], inits[1] + 5]
-    for i in range(3):
 
+    for i in range(3):
         initis = initPamsLab2.init_pams()
         initis[1] = listA[i]
         print(initis[1])
@@ -57,6 +56,7 @@ def gurwitz_crit():
 
 
 def formating_matrix(w):
+
     num, denum = tfdata(w)
     # num = num[0][0][:]
     denum = denum[0][0][:]
