@@ -2,15 +2,17 @@ from control import tfdata, np
 from numpy.linalg import det
 from numpy.ma import arange
 
-from src.Lab2 import initPamsLab2
-from src.Lab2 import newToolBox
-from src.Lab2 import NyquistBode
+from src.Lab2 import initPamsLab2, newToolBox, NyquistBode
 
-
+"""
+function for checking sistainability by gurwitz criterium
+"""
 def gurwitz_crit():
     w = initPamsLab2.calc_w()
 
     matrix = formating_matrix(w)
+    print(matrix)
+
 
     for i in range(len(matrix), 0, -1):
         opr = det(matrix[:i, :i])
@@ -44,6 +46,11 @@ def gurwitz_crit():
         NyquistBode.NyquistBode.all_of_them(w1)
 
 
+
+"""
+
+filling in gurwitz matrix
+"""
 def formating_matrix(w):
 
     num, denum = tfdata(w)

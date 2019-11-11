@@ -1,18 +1,18 @@
+from control import stability_margins
 
 from src.Lab2 import newToolBox
 from src.Lab2 import gurwitzSpaghetti
-from src.Lab2 import NyquistBode
+from src.Lab2 import NyquistBode,initPamsLab2
 
 """
 main file with user choice keys
 """
 
 # key
-# b = 5
-
-b = int(input("Input your desired analyze tool?\n 1 - transition function \n 2 - bode function \n"
-                  " 3 - Nyquist diagram \n 4 - analyzing by all higher tools \n 5 - Gurwitz criterion \n"
-                  " 6 - godoghraph Mihailova \n 7 - poles analyzing "))
+b = 6
+# b = int(input("Input your desired analyze tool?\n 1 - transition function \n 2 - bode function \n"
+#                   " 3 - Nyquist diagram \n 4 - analyzing by all higher tools \n 5 - Gurwitz criterion \n"
+#                   " 6 - godoghraph Mihailova \n 7 - poles analyzing \n :"))
 
 
 dictionary_of_choice = {

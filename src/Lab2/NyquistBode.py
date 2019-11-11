@@ -15,7 +15,14 @@ class NyquistBode:
 
     def get_nyquist_diagram(self):
 
+        print(stability_margins(self.w))
+
         real, imag, freq = nyquist(self.w, labelFreq=10, color='g')
+        circle = plt.Circle((0, 0), 1, color='r')
+        ax = plt.gca()
+        ax.add_patch(circle)
+
+
 
         # print(real, imag)
         # for i in range(len(imag)):
@@ -23,9 +30,8 @@ class NyquistBode:
 
         plt.title('Nyquist Diagram')
         plt.plot()
-        # plt.Circle((0, 0), 1, color='r')
-        # plt.plot()
         plt.show()
+
 
         return
 

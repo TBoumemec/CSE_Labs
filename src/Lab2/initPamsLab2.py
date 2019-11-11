@@ -3,6 +3,7 @@ from control import *
 init = [20, 14, 5, 7, 1, 5]
 
 
+
 def init_pams():
     """
     just getter of initial pams
@@ -13,12 +14,19 @@ def init_pams():
 
 def finish_chain(inits):
     """
-
     :param inits: gives a freedom in changing of init pams
     :return: w6 is a finished chain
     """
-
+    # для задачи на защите
     # w0 = tf(1, 1)
+    # ww = tf([2, 0.1], [1, 0])
+    # # print(ww)
+    # ww2 = tf([0, 3, 0], [4, -2, 1])
+    # # print(ww2)
+    # w33 = series(ww, ww2)
+    # # print(w33)
+    # w44 = feedback(w33, w0, -1)
+    # # print(w44)
 
     compW1 = [[inits[1], 1], [inits[5], 1]]
     w1 = tf(compW1[0], compW1[1])

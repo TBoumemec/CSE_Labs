@@ -47,6 +47,8 @@ class newToolBox:
     def get_godoghraph(self):
         w_den = tf(self.w.den[0][0], [1])
 
+        print(w_den)
+
         array = [];
         x = [];
         y = []
