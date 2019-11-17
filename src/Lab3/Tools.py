@@ -2,9 +2,10 @@ import random
 
 from control import *
 from control.matlab import step
+from numpy import mean
 from numpy.ma import arange, count, arctan
 from control import tf
-from mpmath import re, im, sqrt
+from mpmath import re, im, sqrt, e, pi
 import matplotlib.pyplot as plt
 
 from src.Lab3 import initPamsLab3
@@ -81,7 +82,7 @@ class newToolBox:
         pole, zeros = pzmap(self.w)
         print(pole)
 
-        # print("Время регулирования: " + str(1.0 / abs(max(pole.real))))
+        print("Время регулирования: " + str(1.0 / abs(max(pole.real))))
         print(min(pole))
 
         degree_max = 0
@@ -90,6 +91,37 @@ class newToolBox:
             if (pole[i].imag != 0) & (degree_max < arctan(abs(pole[i].imag) / abs(pole[i].real))):
                  degree_max = arctan(abs(pole[i].imag)/abs(pole[i].real))
         print("Колебательность составляет: " + str(degree_max))
+
+
+        print("Перерегулирование: " + str(e+(pi/degree_max)))
+        print("Степень затухания: " + str(1 - e-(2*pi/degree_max)))
         plt.title('Graph of poles')
         plt.plot()
         plt.show()
+
+
+    def get_bode_func(self):
+
+        mag, phase, omega = bode(self.w, dB=False)
+
+
+        print("Показатель колебательности M: " + str(max(mag) / mag[0]))
+
+        a = []
+        b = []
+
+        for i in range(len(mag)):
+            if -0.000005 < mag[i] < 0.000005:
+                a.append(i)
+            if -0.005 < phase[i] < 0.005:
+                b.append(i)
+
+        print("Запас по фазе: " + str(phase[int(round(mean(a)))]))
+        print("Запас по амплитуде: " + str(mag[int(round(mean(b)))]))
+
+
+        plt.title("Frequency Response", y=2.2)
+        plt.plot()
+        plt.show()
+
+        return
