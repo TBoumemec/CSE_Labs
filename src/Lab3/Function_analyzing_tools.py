@@ -37,28 +37,43 @@ class My_function:
         print("Перерегулирование составляет: " + str(perereg) + " %")
 
         y2 = list(y1)
+        y3 = list(y1)
 
         print("Величина: " + str(max(y2)) + " и время достижения первого максимума: "
               + str(self.t[y2.index(max(y2))]))
+
         del y2[0:y2.index(max(y2))]
         del y2[0:y2.index(min(y2))]
 
-        koleb = max(y2) / max(y1)
-        print("Колебательность составляет: " + str(koleb) + " %")
-        step_zat = 1 - max(y1) / max(y2)
+        step_zat = 1 - max(y2) / max(y1)
         print("Степень затухания составляет: ", step_zat)
+
 
         numnum = 0
 
         for i in range(len(y1)):
             if 0.95 * last < y1[i] < 1.05 * last:
-                num = i
+                # num = i
                 numnum += 1
                 if numnum == 20:
                     print("Время регулирования: " + str(self.t[i]) + " c")
                     break
             else:
                 numnum = 0
+
+        koleb = 0
+
+        while True:
+            if max(y3) > 1.05 * last:
+                del y3[0:y3.index(max(y3))]
+                koleb += 1
+            else : break
+            if 0.95 * last > min(y3):
+                del y3[0:y3.index(min(y3))]
+            else: break
+
+        print("Колебательность составляет: ", koleb, " вершин,"
+                                     " или ", max(y2)/max(y1)*100, "%" )
 
         # *****************************
         # print("Интегральчик: " + str(integrate.quad(y1)))
@@ -80,9 +95,17 @@ class My_function:
         from control import pole
 
         pole, zeros = pzmap(self.w)
-        print("Полюса плоскости: \n" , pole)
 
-        print("Время регулирования: " + str(1.0 / abs(max(pole.real))))
+        print("Полюса плоскости: ")
+        for i in range(len(pole)):
+            if pole[i].real >= 0:
+                a = False
+            print("Полюс ", i + 1, " : ", pole[i])
+
+        if a == False:
+            print("Система не проходит проверку по устойчивости!")
+
+        print("\nВремя регулирования: " + str(1.0 / abs(max(pole.real))))
         # забыл для чего
         # print(min(pole))
 
