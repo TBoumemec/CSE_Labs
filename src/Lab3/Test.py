@@ -1,4 +1,3 @@
-from src.Lab3 import Tools
+from src.Lab3.Function_analyzing_tools import My_function
 
-
-Tools.newToolBox().get_bode_func()
+a = My_function().full_analyze()
