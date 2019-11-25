@@ -3,7 +3,7 @@ from control.matlab import step
 from numpy import mean
 from numpy.ma import arange, count, arctan
 from control import tf
-from mpmath import re, im, sqrt, e, pi
+from mpmath import re, im, sqrt, e, pi, exp
 import matplotlib.pyplot as plt
 from scipy import integrate
 from src.Lab3.Initial_parameters import Initialazer
@@ -13,6 +13,13 @@ Class let work with transition function(get_trans_func), analyzing of poles(get_
                     godoghraph plotting(get_godoghraph)
 
 """
+key1 = 0
+key2 = 0
+key3 = 0
+key4 = 0
+key5 = 0
+key6 = 0
+key7 = 0
 
 
 class My_function:
@@ -38,8 +45,10 @@ class My_function:
 
         if perereg > 30:
             print("Полученная величина выше оптимальной области регулирования")
-        elif perereg <10:
+            key_per = -1
+        elif perereg < 10:
             print("Полученная величина ниже оптимальной области регулирования")
+            key_per = 1
         else:
             print("Отлично")
 
@@ -59,8 +68,10 @@ class My_function:
 
         if step_zat > 0.95:
             print("Полученная величина выше оптимальной области регулирования")
+            key_zat = -1
         elif step_zat < 0.75:
             print("Полученная величина ниже оптимальной области регулирования")
+            key_zat = 1
         else:
             print("Отлично")
 
@@ -71,8 +82,9 @@ class My_function:
                 # num = i
                 numnum += 1
                 if numnum == 20:
+                    vr_reg = self.t[i]
                     print("************************\n"
-                          "Время регулирования: " + str(self.t[i]) + " c")
+                          "Время регулирования: " + str(vr_reg) + " c")
                     break
             else:
                 numnum = 0
@@ -96,11 +108,14 @@ class My_function:
 
         if koleb > 2:
             print("Полученная величина колебаний выше оптимальной области регулирования")
+            key_koleb = -1
         else:
             print("Отлично")
 
         # *****************************
-        # print("Интегральчик: " + str(integrate.quad(y1)))
+        # y = lambda p: self.w
+        # print(y)
+        # print("Интегральчик: " + str(integrate.quad(y,0,vr_reg)))
         # *****************************
 
         plt.plot(self.t, y1, "r")
@@ -113,6 +128,7 @@ class My_function:
         # yUst = y1[-1]
         # yMax = max(y1)
 
+        # key_per, key_zat, key_koleb
         return
 
     def get_poles_analyze(self):
@@ -128,7 +144,7 @@ class My_function:
             print("Полюс ", i + 1, " : ", pole[i])
 
         if a == False:
-            print("Система не проходит проверку по устойчивости!")
+            print("СИСТЕМА НЕ ПРОХОДИТ ПРОВЕРКУ ПО УСТОЙЧИВОСТИ!")
 
         print("\nВремя регулирования: " + str(1.0 / abs(max(pole.real))))
         # забыл для чего
@@ -139,21 +155,44 @@ class My_function:
         for i in range(len(pole)):
             if (pole[i].imag != 0) & (degree_max < arctan(abs(pole[i].imag) / abs(pole[i].real))):
                 degree_max = arctan(abs(pole[i].imag) / abs(pole[i].real))
-        print("Колебательность составляет: " + str(degree_max))
+        print("************************\n"
+              "Колебательность составляет: " + str(degree_max))
+        if degree_max >= 1.57:
+            print("Колебательность выше оптимального диапазона")
+            key_kolebb = -1
 
-        print("Перерегулирование: " + str(e + (pi / degree_max)))
-        print("Степень затухания: " + str(1 - e - (2 * pi / degree_max)))
+        print("************************\n"
+              "Перерегулирование: " + str(e + (pi / degree_max)))
+        step_zat = 1 - exp(- 2 * pi / degree_max)
+        print("************************\n"
+              "Степень затухания: " + str(step_zat))
+        if step_zat > 0.98:
+            print("Степень затухания выше оптимального регулировочного диапазона")
+            key_zatt = -1
+        elif step_zat < 0.9:
+            print("Степень затухания ниже оптимального регулировочного диапазона")
+            key_zatt = 1
+        else: print("Степень затухания в оптимальном диапазоне")
 
         plt.title('Graph of poles')
         plt.plot()
         plt.show()
 
+        # key_kolebb, key_zatt
+        return
+
     def get_bode_func(self):
 
         mag, phase, omega = bode(self.w, dB=False)
 
-        print("Показатель колебательности M: " + str(max(mag) / mag[0]))
-
+        M = max(mag) / mag[0]
+        print("Показатель колебательности M: " + str(M))
+        if M > 1.5:
+            print("Степень затухания выше оптимального регулировочного диапазона")
+            key_kolebbb = -1
+        elif M < 1.1:
+            print("Степень затухания ниже оптимального регулировочного диапазона")
+            key_kolebbb = 1
         c = []
 
         for i in range(1, len(mag)):
@@ -162,7 +201,7 @@ class My_function:
 
         # print("Частота среза: ", str(omega[c[-1]]))
 
-        print("Время регулирования: ", str(2 * 2*pi/omega[c[-1]]))
+        print("Время регулирования: ", str(2 * 2 * pi / omega[c[-1]]))
 
         plt.title("Frequency Response", y=2.2)
         plt.plot()
@@ -179,8 +218,19 @@ class My_function:
             if -0.005 < phase[i] < 0.005:
                 b.append(i)
 
-        print("Запас по фазе: " + str(phase[int(round(mean(a)))]))
-        print("Запас по амплитуде: " + str(mag[int(round(mean(b)))]))
+        print("************************\n"
+              "Запас по фазе: " + str(phase[int(round(mean(a)))]))
+        if phase[int(round(mean(a)))] <= 0:
+            print("Запаса по фазе недостаточно")
+        else:
+            print("Запас достаточен")
+
+        print("************************\n"
+              "апас по амплитуде: " + str(mag[int(round(mean(b)))]))
+        if mag[int(round(mean(b)))] <= 0:
+            print("Запаса по амплитуде недостаточно")
+        else:
+            print("Запас достаточен")
 
         plt.title("Frequency Response", y=2.2)
         plt.plot()
