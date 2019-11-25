@@ -10,14 +10,14 @@ def graf():
                   "Input number of link: "))
 
     b = int(input("Input your desired graph?\n 1 - transition function. \n 2 - impulse function \n"
-                  " 3 - Bode function \n 4 - all of them \n" " : "));
+                  " 3 - Bode function \n 4 - all of them \n" " : "))
 
     dictionary_of_choice = {
         1: functions.trans_func,
         2: functions.imp_func,
         3: functions.bode_func,
         4: functions.all_func,
-    };
+    }
 
     try:
         f = dictionary_of_choice[b](a)
