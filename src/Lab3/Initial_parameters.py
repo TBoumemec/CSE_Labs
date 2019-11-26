@@ -5,7 +5,7 @@ initos = [20, 14, 5, 7, 1, 5]
 
 class Initialazer:
 
-    def __init__(self, inits = initos, regs = 1):
+    def __init__(self, inits = initos, regs=1):
         self.init = inits
         self.reg = regs
 

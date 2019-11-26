@@ -83,6 +83,7 @@ class My_function:
                 numnum += 1
                 if numnum == 20:
                     vr_reg = self.t[i]
+                    t_vr_reg = i
                     print("************************\n"
                           "Время регулирования: " + str(vr_reg) + " c")
                     break
@@ -112,10 +113,17 @@ class My_function:
         else:
             print("Отлично")
 
+        integro = 0
+
+        for i in range(0,t_vr_reg):
+            integro = integro + abs(y1[t_vr_reg] - y1[i])
+
+        print("************************\n"
+              "Интеграл составил: " , integro)
         # *****************************
         # y = lambda p: self.w
         # print(y)
-        # print("Интегральчик: " + str(integrate.quad(y,0,vr_reg)))
+        # print("Интегральчик: " + str(integrate.quad(self.w,0,vr_reg)))
         # *****************************
 
         plt.plot(self.t, y1, "r")
@@ -145,6 +153,7 @@ class My_function:
 
         if a == False:
             print("СИСТЕМА НЕ ПРОХОДИТ ПРОВЕРКУ ПО УСТОЙЧИВОСТИ!")
+        else: print("По критерию полюсов система устойчива")
 
         print("\nВремя регулирования: " + str(1.0 / abs(max(pole.real))))
         # забыл для чего
@@ -218,17 +227,21 @@ class My_function:
             if -0.005 < phase[i] < 0.005:
                 b.append(i)
 
+        zap_a = phase[(round(mean(a)))]
+        zap_b = mag[(round(mean(b)))]
         print("************************\n"
-              "Запас по фазе: " + str(phase[int(round(mean(a)))]))
-        if phase[int(round(mean(a)))] <= 0:
+              "Запас по фазе: " + str(zap_a))
+        if zap_a <= 0:
             print("Запаса по фазе недостаточно")
+            key_phase = 1
         else:
             print("Запас достаточен")
 
         print("************************\n"
-              "апас по амплитуде: " + str(mag[int(round(mean(b)))]))
-        if mag[int(round(mean(b)))] <= 0:
+              "Запас по амплитуде: " + str(zap_b))
+        if zap_b <= 0:
             print("Запаса по амплитуде недостаточно")
+            key_mag = 1
         else:
             print("Запас достаточен")
 
@@ -236,17 +249,18 @@ class My_function:
         plt.plot()
         plt.show()
 
+        # key_kolebbb, key_phase, key_mag
         return
 
     def full_analyze(self):
         print("\n****************************************\n"
               "STEP RESPONCE:\n")
-        My_function().get_trans_func()
+        self.get_trans_func()
 
         print("\n****************************************\n"
               "POLES ANALYZE:\n")
-        My_function().get_poles_analyze()
+        self.get_poles_analyze()
 
         print("\n****************************************\n"
               "BODE FUNCTION:\n")
-        My_function().get_bode_func()
+        self.get_bode_func()
