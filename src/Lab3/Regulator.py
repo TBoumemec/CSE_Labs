@@ -3,7 +3,7 @@ from control import tf, parallel
 
 class Regulatorr:
 
-    def __init__(self, k = 1, Td = 1, Tu = 1):
+    def __init__(self, k=1, Td=1, Tu=1):
         self.k = k
         self.Td = Td
         self.Tu = Tu

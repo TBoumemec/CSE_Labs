@@ -1,7 +1,6 @@
 from control import *
 from control.matlab import step
-from numpy import mean
-from numpy.ma import arange, count, arctan
+from numpy.ma import arange, count, arctan, mean
 from control import tf
 from mpmath import re, im, sqrt, e, pi, exp
 import matplotlib.pyplot as plt
@@ -28,7 +27,12 @@ class My_function:
         self.w = w_f
         self.t = np.linspace(0, stop=50, num=1000)
 
+
     def get_trans_func(self):
+
+        key_koleb = 0
+        key_reg = 0
+        key_per = 0
 
         print(self.w)
 
@@ -43,7 +47,7 @@ class My_function:
         print("************************\n"
               "Перерегулирование составляет: " + str(perereg) + " %")
 
-        if perereg > 30:
+        if perereg > 27:
             print("Полученная величина выше оптимальной области регулирования")
             key_per = -1
         elif perereg < 10:
@@ -66,16 +70,18 @@ class My_function:
         print("************************\n"
               "Степень затухания составляет: ", step_zat)
 
-        if step_zat > 0.95:
-            print("Полученная величина выше оптимальной области регулирования")
-            key_zat = -1
-        elif step_zat < 0.75:
-            print("Полученная величина ниже оптимальной области регулирования")
-            key_zat = 1
-        else:
-            print("Отлично")
+        # if step_zat > 0.95:
+        #     print("Полученная величина выше оптимальной области регулирования")
+        #     key_zat = -1
+        # elif step_zat < 0.75:
+        #     print("Полученная величина ниже оптимальной области регулирования")
+        #     key_zat = 1
+        # else:
+        #     print("Отлично")
 
         numnum = 0
+        vr_reg = 0
+        t_vr_reg = 0
 
         for i in range(len(y1)):
             if 0.95 * last < y1[i] < 1.05 * last:
@@ -89,6 +95,12 @@ class My_function:
                     break
             else:
                 numnum = 0
+
+        if vr_reg > 17:
+            print("Полученная величина выше оптимальной области регулирования")
+            key_reg = -1
+        else:
+            print("Отлично")
 
         koleb = 0
 
@@ -115,14 +127,12 @@ class My_function:
 
         integro = 0
 
-        for i in range(0,t_vr_reg):
+        for i in range(0, t_vr_reg):
             integro = integro + abs(y1[t_vr_reg] - y1[i])
 
         print("************************\n"
-              "Интеграл составил: " , integro)
+              "Интеграл составил: ", integro)
         # *****************************
-        # y = lambda p: self.w
-        # print(y)
         # print("Интегральчик: " + str(integrate.quad(self.w,0,vr_reg)))
         # *****************************
 
@@ -133,13 +143,15 @@ class My_function:
         plt.grid(True)
         plt.show()
 
-        # yUst = y1[-1]
-        # yMax = max(y1)
 
-        # key_per, key_zat, key_koleb
-        return
+        # return [key_koleb, key_reg, key_per]
 
     def get_poles_analyze(self):
+
+        key_koleb = 0
+        key_reg = 0
+        key_per = 0
+
         from control import pole
 
         pole, zeros = pzmap(self.w)
@@ -153,11 +165,18 @@ class My_function:
 
         if a == False:
             print("СИСТЕМА НЕ ПРОХОДИТ ПРОВЕРКУ ПО УСТОЙЧИВОСТИ!")
-        else: print("По критерию полюсов система устойчива")
+        else:
+            print("По критерию полюсов система устойчива")
 
-        print("\nВремя регулирования: " + str(1.0 / abs(max(pole.real))))
-        # забыл для чего
-        # print(min(pole))
+        vr_reg = 1.0 / abs(max(pole.real))
+
+        print("\nВремя регулирования: " + str(vr_reg))
+
+        if vr_reg > 17:
+            print("Полученная величина выше оптимальной области регулирования")
+            key_reg = -1
+        else:
+            print("Отлично")
 
         degree_max = 0
 
@@ -168,29 +187,46 @@ class My_function:
               "Колебательность составляет: " + str(degree_max))
         if degree_max >= 1.57:
             print("Колебательность выше оптимального диапазона")
-            key_kolebb = -1
+            key_koleb = -1
+
+        perereg = exp(- pi / degree_max) * 100
 
         print("************************\n"
-              "Перерегулирование: " + str(e + (pi / degree_max)))
+              "Перерегулирование: " + str(perereg) + " %")
+
+        if perereg > 27:
+            print("Полученная величина выше оптимальной области регулирования")
+            key_per = -1
+        elif perereg < 10:
+            print("Полученная величина ниже оптимальной области регулирования")
+            key_per = 1
+        else:
+            print("Отлично")
+
         step_zat = 1 - exp(- 2 * pi / degree_max)
         print("************************\n"
               "Степень затухания: " + str(step_zat))
-        if step_zat > 0.98:
-            print("Степень затухания выше оптимального регулировочного диапазона")
-            key_zatt = -1
-        elif step_zat < 0.9:
-            print("Степень затухания ниже оптимального регулировочного диапазона")
-            key_zatt = 1
-        else: print("Степень затухания в оптимальном диапазоне")
+
+        # if step_zat > 0.98:
+        #     print("Степень затухания выше оптимального регулировочного диапазона")
+        #     key_zatt = -1
+        # elif step_zat < 0.9:
+        #     print("Степень затухания ниже оптимального регулировочного диапазона")
+        #     key_zatt = 1
+        # else: print("Степень затухания в оптимальном диапазоне")
 
         plt.title('Graph of poles')
         plt.plot()
         plt.show()
 
-        # key_kolebb, key_zatt
-        return
+        # return [key_koleb, key_reg, key_per]
 
     def get_bode_func(self):
+
+        key_koleb = 0
+        key_reg = 0
+        key_phase = 0
+        key_mag = 0
 
         mag, phase, omega = bode(self.w, dB=False)
 
@@ -198,10 +234,10 @@ class My_function:
         print("Показатель колебательности M: " + str(M))
         if M > 1.5:
             print("Степень затухания выше оптимального регулировочного диапазона")
-            key_kolebbb = -1
+            key_koleb = -1
         elif M < 1.1:
             print("Степень затухания ниже оптимального регулировочного диапазона")
-            key_kolebbb = 1
+            key_koleb = 1
         c = []
 
         for i in range(1, len(mag)):
@@ -209,8 +245,14 @@ class My_function:
                 c.append(i)
 
         # print("Частота среза: ", str(omega[c[-1]]))
+        vr_reg = 2 * 2 * pi / omega[c[-1]]
 
-        print("Время регулирования: ", str(2 * 2 * pi / omega[c[-1]]))
+        print("Время регулирования: ", str(vr_reg))
+        if vr_reg > 17:
+            print("Полученная величина выше оптимальной области регулирования")
+            key_reg = -1
+        else:
+            print("Отлично")
 
         plt.title("Frequency Response", y=2.2)
         plt.plot()
@@ -227,8 +269,8 @@ class My_function:
             if -0.005 < phase[i] < 0.005:
                 b.append(i)
 
-        zap_a = phase[(round(mean(a)))]
-        zap_b = mag[(round(mean(b)))]
+        zap_a = phase[int(round(mean(a)))]
+        zap_b = mag[int(round(mean(b)))]
         print("************************\n"
               "Запас по фазе: " + str(zap_a))
         if zap_a <= 0:
@@ -249,10 +291,12 @@ class My_function:
         plt.plot()
         plt.show()
 
-        # key_kolebbb, key_phase, key_mag
-        return
+        # return [key_koleb, key_reg, key_phase, key_mag]
 
     def full_analyze(self):
+
+        k = []
+
         print("\n****************************************\n"
               "STEP RESPONCE:\n")
         self.get_trans_func()
@@ -264,3 +308,17 @@ class My_function:
         print("\n****************************************\n"
               "BODE FUNCTION:\n")
         self.get_bode_func()
+
+        # print("\n****************************************\n"
+        #       "STEP RESPONCE:\n")
+        # k.extend(self.get_trans_func())
+        #
+        # print("\n****************************************\n"
+        #       "POLES ANALYZE:\n")
+        # k.extend(self.get_poles_analyze())
+        #
+        # print("\n****************************************\n"
+        #       "BODE FUNCTION:\n")
+        # k.extend(self.get_bode_func())
+        #
+        # return k
