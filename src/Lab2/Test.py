@@ -9,7 +9,7 @@ main file with user choice keys
 """
 
 # key
-b = 6
+b = 4
 # b = int(input("Input your desired analyze tool?\n 1 - transition function \n 2 - bode function \n"
 #                   " 3 - Nyquist diagram \n 4 - analyzing by all higher tools \n 5 - Gurwitz criterion \n"
 #                   " 6 - godoghraph Mihailova \n 7 - poles analyzing \n :"))

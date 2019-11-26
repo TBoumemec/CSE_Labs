@@ -70,6 +70,6 @@ class newToolBox:
         plt.show()
 
     def all_of_them(self):
-        newToolBox(self).get_trans_func()
-        newToolBox(self).get_poles_analyze()
-        newToolBox(self).get_godoghraph()
+        self.get_trans_func()
+        self.get_poles_analyze()
+        self.get_godoghraph()
