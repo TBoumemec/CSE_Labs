@@ -1,37 +1,44 @@
-from xmlrpc.client import boolean
-
-from src.Lab3.Function_analyzing_tools import My_function
-from src.Lab3.Regulator import Regulatorr
+from src.Lab3.Function_analyzing_tools import Regulator_analyzer
+from src.Lab3.Regulator import Regulator_body
 from src.Lab3.Initial_parameters import Initialazer
 
-boop = True
+def regulator_customization():
 
-# initos = [20, 14, 5, 7, 1, 5]
+    boop = True
 
-b = Regulatorr()
-c = Initialazer(regs=b.Prop_reg())
-a = My_function(w_f = c.get_scheme_solving())
+    regulator = Regulator_body()
+    grand_gear_function = Initialazer(regs=regulator.Prop_reg())
+    analyzer = Regulator_analyzer(w_f=grand_gear_function.get_scheme_solving())
+    actual_keys = []
+    k, Td, Tu = 1, 1, 1
 
-while boop == True:
+    while boop:
 
-    print(c)
+        actual_keys.append(analyzer.full_analyze())
+        # actual_keys = a.full_analyze()
 
-    a.full_analyze()
+        print("k = ", k, " Td = ", Td, "Tu = ", Tu)
 
-    k = float(input("Введите коэфф k: "))
-    Td = float(input("Введите коэфф Td: "))
-    Tu = float(input("Введите коэфф Tu: "))
+        for i in range(len(actual_keys)):
+            print(actual_keys[i])
 
-    b = Regulatorr(k, Td, Tu)
-    print(b)
-    # c = Initialazer(regs = b)
-    c = Initialazer(regs=b.PUD_reg())
-    # c = Initialazer(regs=b).get_scheme_solving()
+        k = float(input("\nВведите коэфф k: "))
+        Td = float(input("Введите коэфф Td: "))
+        Tu = float(input("Введите коэфф Tu: "))
 
-    a = My_function(w_f=c.get_scheme_solving())
+        regulator = Regulator_body(k, Td, Tu)
+        print(regulator)
+        # c = Initialazer(regs = b)
+        grand_gear_function = Initialazer(regs=regulator.PUD_reg())
+        # c = Initialazer(regs=b).get_scheme_solving()
 
-    # cc = c.get_scheme_solving()
-    # print(cc)
+        analyzer = Regulator_analyzer(w_f=grand_gear_function.get_scheme_solving())
+
+        # cc = c.get_scheme_solving()
+        # print(cc)
+        # 0 0 1
+
+        # boop = input("1 или 0: ")
 
 
-    # boop = input("1 или 0: ")
+regulator_customization()

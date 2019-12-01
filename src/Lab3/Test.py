@@ -2,17 +2,17 @@ from xmlrpc.client import boolean
 
 from numpy.ma import mean
 
-from src.Lab3.Function_analyzing_tools import My_function
-from src.Lab3.Regulator import Regulatorr
+from src.Lab3.Function_analyzing_tools import Regulator_analyzer
+from src.Lab3.Regulator import Regulator_body
 from src.Lab3.Initial_parameters import Initialazer
 
 boop = True
 
 # initos = [20, 14, 5, 7, 1, 5]
 
-b = Regulatorr()
+b = Regulator_body()
 c = Initialazer(regs=b.Prop_reg())
-a = My_function(w_f=c.get_scheme_solving())
+a = Regulator_analyzer(w_f=c.get_scheme_solving())
 
 keys = [0 for i in range(10)]
 Ks = [1 for i in range(len(keys))]
@@ -59,8 +59,8 @@ while boop:
     Td = -mean(Ks[8:9])
     Tu = mean(Ks[8:9])
 
-    b = Regulatorr(k, Td, Tu)
+    b = Regulator_body(k, Td, Tu)
     print(b)
     c = Initialazer(regs=b.PUD_reg())
 
-    a = My_function(w_f=c.get_scheme_solving())
+    a = Regulator_analyzer(w_f=c.get_scheme_solving())

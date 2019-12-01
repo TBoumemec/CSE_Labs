@@ -9,12 +9,19 @@ class Initialazer:
         self.init = inits
         self.reg = regs
 
-    def get_pams(self):
+    def get_initial_parameters(self):
         """
         just getter of initial pams
-        :return:
+        :return: initial pams list
         """
         return self.init
+
+    def get_regulator_function(self):
+        """
+        getter of actual inputted regulator gear function
+        :return: regulator gear function
+        """
+        return self.reg
 
     def get_scheme_solving(self):
         """
