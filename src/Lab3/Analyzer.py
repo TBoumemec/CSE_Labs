@@ -1,30 +1,22 @@
-from math import inf
+from math import inf, log10, degrees
 
 from control import *
-from control.matlab import step
+from control.matlab import step, pzmap, bode
 from numpy.ma import arctan, mean
 from mpmath import pi, exp
 import matplotlib.pyplot as plt
-from src.Lab3.Initial_parameters import Initialazer
+from src.Lab3.Scheme import Scheme_body
 
 """
 Class let work with transition function(get_trans_func), analyzing of poles(get_poles_analyze),
                     godoghraph plotting(get_godoghraph)
-
 """
-key1 = 0
-key2 = 0
-key3 = 0
-key4 = 0
-key5 = 0
-key6 = 0
-key7 = 0
 
 
 class Regulator_analyzer:
 
-    def __init__(self, w_f=Initialazer().get_scheme_solving()):
-        self.w = w_f
+    def __init__(self, w_f=Scheme_body()):
+        self.w = w_f.get_scheme_solving()
         self.t = np.linspace(0, stop=50, num=1000)
 
     def get_trans_func(self):
@@ -92,7 +84,7 @@ class Regulator_analyzer:
                     print("*" * 20, "\n"
                                     "Время регулирования: " + str(vr_reg) + " c")
                     break
-            else:
+            else:  # функция еще не в установившемся значении
                 counter = 0
 
         print("Полученная величина выше оптимальной области регулирования" if vr_reg > 17
@@ -130,7 +122,7 @@ class Regulator_analyzer:
         integro = 0
 
         for i in range(0, t_vr_reg):
-            integro = integro + abs(y1[t_vr_reg] - y1[i])
+            integro = integro + abs(y1[t_vr_reg] - y1[i]) * 0.05
 
         print("*" * 20, "\n"
                         "Интеграл составил: ", integro)
@@ -144,7 +136,7 @@ class Regulator_analyzer:
 
         return [key_koleb, key_reg, key_per]
 
-    def get_poles_analyze(self):
+    def get_poles_analyze(self, pole):
 
         key_koleb = 0
         key_reg = 0
@@ -152,16 +144,15 @@ class Regulator_analyzer:
 
         degree_max = 0
 
-        pole, zeros = pzmap(self.w)
-
         a = True
+
         counter = 1
         print("Полюса плоскости: ")
         for i in pole:
-            if i.real >= 0:
+            if i.real >= 0:  # корень в левой полуплоскости
                 a = False
             print("Полюс ", counter, " : ", i)
-            counter +=1
+            counter += 1
 
         print("СИСТЕМА НЕ ПРОХОДИТ ПРОВЕРКУ ПО УСТОЙЧИВОСТИ!" if not a else
               "По критерию полюсов система устойчива")
@@ -214,6 +205,11 @@ class Regulator_analyzer:
         return [key_koleb, key_reg, key_per]
 
     def get_bode_func(self):
+        """
+        analyzing parameters and plotting "AFC" and "LAFC"
+
+        :return:
+        """
 
         key_koleb = 0
         key_reg = 0
@@ -231,8 +227,9 @@ class Regulator_analyzer:
             print("Степень затухания ниже оптимального регулировочного диапазона")
             key_koleb = 1
 
-        # c = [i for i in range(1, len(mag)) if mag[0] - 0.1 < mag[i] < mag[0] + 0.1]
         c = []
+
+        # c = [i for i in range(1, len(mag)) if mag[0] - 0.1 < mag[i] < mag[0] + 0.1]
 
         for i in range(1, len(mag)):
             if mag[0] - 0.1 < mag[i] < mag[0] + 0.1:
@@ -253,17 +250,32 @@ class Regulator_analyzer:
 
         mag, phase, omega = bode(self.w, dB=True)
 
+        mag = [20 * log10(i) for i in mag]
+
+        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        mag1 = list(mag)
+        for i in range(0, mag1.index(max(mag1))):
+            mag1[i] = inf
+        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        phase = [degrees(i) for i in phase]
+
+        phase1 = list(phase)
+
+        for i in range(phase1.index(min(phase1)), len(phase1)):
+            phase1[i] = -inf
+
         a = []
         b = []
 
-        for i in range(len(mag)):
-            if -0.000005 < mag[i] < 0.000005:
+        for i in range(len(mag1)):
+            if -5 < mag1[i] < 5 and len(a) <= 1:
                 a.append(i)
-            if -0.005 < phase[i] < 0.005:
+            if -190 < phase1[i] < -170 and len(b) <= 1:
                 b.append(i)
 
         if a:
-            zap_a = phase[int(round(mean(a)))]
+            zap_a = phase[int(round(mean(a)))] + 180
             print("*" * 20, "\n"
                             "Запас по фазе: " + str(zap_a))
             if zap_a <= 0:
@@ -276,8 +288,9 @@ class Regulator_analyzer:
             key_phase = 1
 
         if b:
+            print(b)
 
-            zap_b = mag[int(round(mean(b)))]
+            zap_b = - mag[int(round(mean(b)))]
             print("*" * 20, "\n"
                             "Запас по амплитуде: " + str(zap_b))
             if zap_b <= 0:
@@ -305,7 +318,12 @@ class Regulator_analyzer:
 
         print("\n", "*" * 40, "\n"
                               "POLES ANALYZE:\n")
-        k.extend(self.get_poles_analyze())
+
+        pole, zeros = pzmap(self.w)
+        if pole != []:
+            k.extend(self.get_poles_analyze(pole))
+        else:
+            print("Корней нет!!!")
 
         print("\n", "*" * 40, "\n"
                               "BODE FUNCTION:\n")

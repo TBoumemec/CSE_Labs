@@ -1,13 +1,15 @@
 from control import *
+from src.Lab3.Regulator import Regulator_body
 
-initos = [20, 14, 5, 7, 1, 5]
 
 
-class Initialazer:
 
-    def __init__(self, inits = initos, regs=1):
+class Scheme_body:
+
+    def __init__(self, inits=[20, 14, 5, 7, 1, 5], regs_w=Regulator_body().Prop_reg()):
         self.init = inits
-        self.reg = regs
+        # unchanging parameter
+        self.regs_w = regs_w
 
     def get_initial_parameters(self):
         """
@@ -21,7 +23,7 @@ class Initialazer:
         getter of actual inputted regulator gear function
         :return: regulator gear function
         """
-        return self.reg
+        return self.regs_w
 
     def get_scheme_solving(self):
         """
@@ -43,7 +45,7 @@ class Initialazer:
         compW4 = [self.init[0], [self.init[3], 1]]
         w4 = tf(compW4[0], compW4[1])
 
-        w5 = series(w2, w3, w4, w1, self.reg)
+        w5 = series(w2, w3, w4, w1, self.regs_w)
 
         w6 = feedback(w5, w0, -1)
 
