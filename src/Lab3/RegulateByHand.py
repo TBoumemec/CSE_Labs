@@ -6,15 +6,19 @@ from src.Lab3.Scheme import Scheme_body
 def regulator_customization():
     """
     main analyzing function
-    :return:
     """
 
     boop = True
     actual_keys = []
-    k, Td, Tu = 1, 1, 1
-    Reg_type = "PID"
-    regulator = Regulator_body()
     regs_w = 0
+    regulator = Regulator_body()
+
+    # начальные значения коэффициентов
+    k, Td, Tu = 1, 1, 1
+    """
+    Ввести PID или Prop в зависимости от желаемого исследования
+    """
+    Reg_type = "PID"
 
     while boop:
 
