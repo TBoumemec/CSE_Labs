@@ -1,0 +1,19 @@
+
+LABORATORY WORK No. 3
+DETERMINATION OF SETTING PARAMETERS OF THE REGULATOR MANUAL SELECTION
+
+Objective:
+    Determination of quality indicators of a stationary automatic control
+    system in steady and transient modes by direct and indirect methods.
+
+Internal project classes:
+    Adaptivity(Dead).class -- conception of adaptive regulator be stayed in project
+
+    Analyzer.class -- body - instrument having properties of research scheme at entrance and/
+    value of regulator quatity at exit/
+
+    RegulateByHand.class -- conception of handle regulator and its quality analyzing
+
+    Regulator.class - body of regulator
+
+    Scheme.class - body of control object

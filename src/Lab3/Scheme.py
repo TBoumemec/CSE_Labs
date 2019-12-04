@@ -7,29 +7,28 @@ from src.Lab3.Regulator import Regulator_body
 class Scheme_body:
 
     def __init__(self, inits=[20, 14, 5, 7, 1, 5], regs_w=Regulator_body().Prop_reg()):
+        """
+        :param inits: matrix of initial parameters
+        :param regs_w: transmittion function of regulator
+        """
         self.init = inits
         # unchanging parameter
         self.regs_w = regs_w
 
     def get_initial_parameters(self):
-        """
-        just getter of initial pams
-        :return: initial pams list
-        """
+
         return self.init
 
     def get_regulator_function(self):
-        """
-        getter of actual inputted regulator gear function
-        :return: regulator gear function
-        """
+
         return self.regs_w
 
     def get_scheme_solving(self):
         """
-        same as finish_chain but for unlocked CSU
+        Calculating transmission function for locked CSU;
+        Should be changed dependently of research scheme.
         :param init: gives a freedom in changing of pams
-        :return: w6 is a finished chain
+        :return: w6 is a finished chain transmission func
         """
         w0 = tf(1,1)
 

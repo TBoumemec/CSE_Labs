@@ -5,14 +5,14 @@ from src.Lab3.Scheme import Scheme_body
 
 def regulator_customization():
     """
-    main function
+    main analyzing function
     :return:
     """
 
     boop = True
     actual_keys = []
     k, Td, Tu = 1, 1, 1
-    Reg_type = "Prop"
+    Reg_type = "PID"
     regulator = Regulator_body()
     regs_w = 0
 
@@ -36,13 +36,12 @@ def regulator_customization():
             regulator.set_regs(k)
             regs_w = regulator.Prop_reg()
 
-        print(regulator)
 
         grand_gear_function = Scheme_body(regs_w=regs_w)
 
         analyzer = Regulator_analyzer(w_f=grand_gear_function)
 
-        actual_keys.append(analyzer.get_trans_func())
+        actual_keys.append(analyzer.full_analyze())
 
         for key in actual_keys:
             print(key)

@@ -5,7 +5,6 @@ class Regulator_body:
 
     def __init__(self, k=1, Td=1, Tu=1):
         """
-        constructor
         :param k: proportional coefficient
         :param Td: differential coefficient
         :param Tu: integral coefficient
@@ -15,20 +14,11 @@ class Regulator_body:
         self.Tu = Tu
 
     def get_regulator_koeffs(self):
-        """
-        getter
-        :return:
-        """
+
         return self.k, self.Td, self.Tu
 
     def set_regs(self, k=1, Td=1, Tu=1):
-        """
-        setter
-        :param k: proportional coefficient
-        :param Td: differential coefficient
-        :param Tu: integral coefficient
-        :return:
-        """
+
         self.k = k
         self.Td = Td
         self.Tu = Tu
@@ -36,10 +26,9 @@ class Regulator_body:
     def Prop_reg(self):
         """
         definition for calculating transmission function of propotrional
-        regulator
+        regulator type
         :return: transmission function
         """
-
 
         w = tf([0, self.k], [0, 1])
         print(w)
@@ -47,10 +36,8 @@ class Regulator_body:
 
     def PID_reg(self):
         """
-
-        definition for calculating transmission function of complex regulator
-
-         :return: transmission function
+        definition for calculating transmission function of complex PID regulator type
+        :return: transmission function
         """
 
         w1 = tf([0, self.k], [0, 1])
