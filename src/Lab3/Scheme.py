@@ -1,12 +1,10 @@
 from control import *
-from src.Lab3.Regulator import Regulator_body
+from src.Lab3.Regulator import ProportionalRegulator
 
 
+class SchemeBody:
 
-
-class Scheme_body:
-
-    def __init__(self, inits=[20, 14, 5, 7, 1, 5], regs_w=Regulator_body().Prop_reg()):
+    def __init__(self, inits=[20, 14, 5, 7, 1, 5], regs_w=ProportionalRegulator().Prop_reg()):
         """
         :param inits: matrix of initial parameters
         :param regs_w: transmittion function of regulator
@@ -16,11 +14,9 @@ class Scheme_body:
         self.regs_w = regs_w
 
     def get_initial_parameters(self):
-
         return self.init
 
     def get_regulator_function(self):
-
         return self.regs_w
 
     def get_scheme_solving(self):
@@ -30,7 +26,7 @@ class Scheme_body:
         :param init: gives a freedom in changing of pams
         :return: w6 is a finished chain transmission func
         """
-        w0 = tf(1,1)
+        w0 = tf(1, 1)
 
         compW1 = [[self.init[1], 1], [self.init[5], 1]]
         w1 = tf(compW1[0], compW1[1])

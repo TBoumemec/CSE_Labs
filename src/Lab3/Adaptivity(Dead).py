@@ -2,17 +2,17 @@ from xmlrpc.client import boolean
 
 from numpy.ma import mean
 
-from src.Lab3.Analyzer import Regulator_analyzer
-from src.Lab3.Regulator import Regulator_body
-from src.Lab3.Scheme import Scheme_body
+from src.Lab3.Analyzer import RegulatorAnalyzer
+from src.Lab3.Regulator import RegulatorBody
+from src.Lab3.Scheme import SchemeBody
 
 boop = True
 
 # initos = [20, 14, 5, 7, 1, 5]
 
-b = Regulator_body()
-c = Scheme_body(regs_w=b.Prop_reg())
-a = Regulator_analyzer(w_f=c.get_scheme_solving())
+b = RegulatorBody()
+c = SchemeBody(regs_w=b.Prop_reg())
+a = RegulatorAnalyzer(w_f=c.get_scheme_solving())
 
 keys = [0 for i in range(10)]
 Ks = [1 for i in range(len(keys))]
@@ -59,8 +59,8 @@ while boop:
     Td = -mean(Ks[8:9])
     Tu = mean(Ks[8:9])
 
-    b = Regulator_body(k, Td, Tu)
+    b = RegulatorBody(k, Td, Tu)
     print(b)
-    c = Scheme_body(regs_w=b.PID_reg())
+    c = SchemeBody(regs_w=b.PID_reg())
 
-    a = Regulator_analyzer(w_f=c.get_scheme_solving())
+    a = RegulatorAnalyzer(w_f=c.get_scheme_solving())

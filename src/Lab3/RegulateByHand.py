@@ -1,6 +1,6 @@
-from src.Lab3.Analyzer import Regulator_analyzer
-from src.Lab3.Regulator import Regulator_body
-from src.Lab3.Scheme import Scheme_body
+from src.Lab3.Analyzer import RegulatorAnalyzer
+from src.Lab3.Regulator import PIDRegulator, ProportionalRegulator
+from src.Lab3.Scheme import SchemeBody
 
 
 def regulator_customization():
@@ -11,12 +11,15 @@ def regulator_customization():
     boop = True
     actual_keys = []
     regs_w = 0
-    regulator = Regulator_body()
+    p_regulator = ProportionalRegulator()
+    pid_regulator = PIDRegulator()
 
     # начальные значения коэффициентов
     k, Td, Tu = 1, 1, 1
     """
     Ввести PID или Prop в зависимости от желаемого исследования
+    Для пропорционального регулятора оптимально: Kп = 0.1
+    Для ПИД- регулятора: Kп = 1, Кд = 3, Ки = 3
     """
     Reg_type = "PID"
 
@@ -29,21 +32,21 @@ def regulator_customization():
             Td = float(input("Введите коэфф Td: "))
             Tu = float(input("Введите коэфф Tu: "))
 
-            regulator.set_regs(k, Td, Tu)
-            regs_w = regulator.PID_reg()
+            pid_regulator.set_regs(k, Td, Tu)
+            regs_w = pid_regulator.PID_reg()
 
         elif Reg_type == "Prop":
 
             print("k = ", k)
             k = float(input("\nВведите коэфф k: "))
 
-            regulator.set_regs(k)
-            regs_w = regulator.Prop_reg()
+            p_regulator.set_regs(k)
+            regs_w = p_regulator.Prop_reg()
 
 
-        grand_gear_function = Scheme_body(regs_w=regs_w)
+        grand_gear_function = SchemeBody(regs_w=regs_w)
 
-        analyzer = Regulator_analyzer(w_f=grand_gear_function)
+        analyzer = RegulatorAnalyzer(w_f=grand_gear_function)
 
         actual_keys.append(analyzer.full_analyze())
 

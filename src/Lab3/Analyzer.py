@@ -5,7 +5,7 @@ from control.matlab import step, pzmap, bode
 from numpy.ma import arctan, mean
 from mpmath import pi, exp
 import matplotlib.pyplot as plt
-from src.Lab3.Scheme import Scheme_body
+from src.Lab3.Scheme import SchemeBody
 
 """
 Class let work with transition function(get_trans_func), analyzing of poles(get_poles_analyze),
@@ -13,9 +13,9 @@ Class let work with transition function(get_trans_func), analyzing of poles(get_
 """
 
 
-class Regulator_analyzer:
+class RegulatorAnalyzer:
 
-    def __init__(self, w_f=Scheme_body()):
+    def __init__(self, w_f=SchemeBody()):
         self.w = w_f.get_scheme_solving()
         self.t = np.linspace(0, stop=100, num=2000)
 

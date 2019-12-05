@@ -1,7 +1,7 @@
 from control import tf, parallel
 
 
-class Regulator_body:
+class RegulatorBody:
 
     def __init__(self, k=1, Td=1, Tu=1):
         """
@@ -23,6 +23,8 @@ class Regulator_body:
         self.Td = Td
         self.Tu = Tu
 
+
+class ProportionalRegulator(RegulatorBody):
     def Prop_reg(self):
         """
         definition for calculating transmission function of propotrional
@@ -34,6 +36,8 @@ class Regulator_body:
         print(w)
         return w
 
+
+class PIDRegulator(RegulatorBody):
     def PID_reg(self):
         """
         definition for calculating transmission function of complex PID regulator type
