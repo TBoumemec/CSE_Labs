@@ -5,7 +5,20 @@ from src.Lab4.Population import PopulationBody
 """
 
 
-def main_motion():
+def genetic_method():
+    """
+    Генетический способ подбора параметров регулятора
+    """
+
+    def target_function(population):
+        """
+        здесь будет происходить оценка каждой особи
+        :param population: популяция особей
+        :return: лист оценок
+        """
+
+        pass
+
     # создание популяции
     group = PopulationBody()
     group.create_new_population()
@@ -33,15 +46,14 @@ def main_motion():
         if len(best_of_the_best) >= 50:  # неудачный вид
             group.create_new_population()
 
-
-def target_function(population):
+def ZN_Method():
     """
-    здесь будет происходить оценка каждой особи
-    :param population: популяция особей
-    :return: лист оценок
+    Метод подбора параметров регулятора Зиглера-Николса
+    :return:
     """
-
     pass
 
 
-main_motion()
+
+genetic_method()
+ZN_Method()
