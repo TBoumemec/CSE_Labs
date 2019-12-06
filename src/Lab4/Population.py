@@ -1,3 +1,5 @@
+from numpy import random
+
 from src.Lab4.Regulator import GeneticPIDRegulatorBody
 
 
@@ -8,55 +10,93 @@ class PopulationBody:
 
     def __init__(self, quantity=90):
         self.quantity = quantity
-        self.pop_list = [0 for i in range(quantity)]
+        self.pop_list = [GeneticPIDRegulatorBody() for i in range(quantity)]
+
+    def set_pop_list(self, new_pop_list):
+        """
+        ввод нового готового списка популяции
+        :param new_pop_list:
+        :return:
+        """
+        assert type(new_pop_list) == GeneticPIDRegulatorBody, "Неверный тип, угроза ошибки"
+        self.pop_list = new_pop_list
 
     def create_new_population(self):
         """
         создание новой популяции
         :return: будет возвращаться массив сгенерированных особей
         """
-
-        self.pop_list = [GeneticPIDRegulatorBody() for i in range(len(self.pop_list))]
-
         for i in range(len(self.pop_list)):
             self.pop_list[i].set_random_regs()
-            print(self.pop_list[i].show_regulator_coefficients())
 
-    def sort_and_take_best(self, degrees):
+    def sort_and_take_best(self, degree):
         """
-        сортирует особи в порядке убывания их оценок
-        :param degrees:
-        :return:
+        сортирует особи в порядке возрастания их оценок
+        :param degree: лист с оценками
+        :return: отсортированный лист и лучшая особь
         """
-
         a = True
+
+        # сортировка методом пузырька
         while a:
             a = False
         for i in range(len(self.pop_list)):
-            a = a or degrees[i] < degrees[i + 1]
-            if degrees[i] < degrees[i + 1]:
-                self.pop_list[i + 1], self.pop_list = self.pop_list[i], self.pop_list[i + 1]
+            a = a or degree[i] > degree[i + 1]
+            if degree[i] < degree[i + 1]:
+                self.pop_list[i + 1], self.pop_list[i] = self.pop_list[i], self.pop_list[i + 1]
+                degree[i], degree[i + 1] = degree[i + 1], degree[i]
 
-        pass
+        return self.pop_list, self.pop_list[0]
 
     def pop_selection(self):
         """
         класс выполняет отбор лучших 30% особей
         :return: возвращает список лучших 30%
         """
-        a = 0
-        pass
+        return self.pop_list[0:len(self.pop_list) // 3]
 
     def pop_mutation(self):
         """
         класс выполняет мутацию 35% худших особей
         :return: мутировавшую популяцию
         """
-        pass
+
+        mut_group = list(self.pop_list[
+                         int(len(self.pop_list) // 1.6):len(self.pop_list)])
+
+        for i in range(len(mut_group)):
+            # количество новых сгенерированных коэффициентов
+            num = random.randint(1, 3)
+            # А - список коэффициентов Кп, Кд и Ки для данного регулятора
+            A = mut_group[i].get_regulator_coefficients()
+            for i in range(len(num)):
+                A[random.randint(0, 2)] = random.uniform(0.01, 5)
+            mut_group[i].set_regulator_coefficients(k=A[0], Td=A[1], Tu=A[2])
+
+        return mut_group
 
     def pop_breeding(self):
         """
         класс выполняет скрещивание 35% особей средней оценки
         :return: новую дочернюю популяцию
         """
-        pass
+        breed_group = list(self.pop_list[
+                           len(self.pop_list) // 6:int(len(self.pop_list) // 1.6)])
+
+        for i in range(len(breed_group)):
+
+            # из случайного регулятора популяции в список A_get записываются коэффициенты
+            A_get = (breed_group[random.randint(0, len(breed_group))]
+                     .get_regulator_coefficients())
+
+            # А - список коэффициентов Кп, Кд и Ки для данного регулятора
+            A = breed_group[i].get_regulator_coefficients()
+
+            for i in range(len(A_get)):
+                num = random.randint(0, 2)
+                # перемешиваются случайным образом
+                A[num] = A_get[num]
+
+            breed_group[i].set_regulator_coefficients(k=A[0], Td=A[1], Tu=A[2])
+
+        return breed_group

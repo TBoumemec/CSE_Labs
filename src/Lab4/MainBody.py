@@ -35,7 +35,7 @@ def genetic_method():
     while min(grades) > 0.1:
 
         # процесс селекции, мутации и скрещивания
-        group = (group.pop_selection()
+        group.set_pop_list(group.pop_selection()
                  + group.pop_mutation() + group.pop_breeding())
 
         grades = target_function(group)
