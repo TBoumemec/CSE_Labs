@@ -4,7 +4,7 @@ from src.Lab3.Regulator import ProportionalRegulator
 
 class SchemeBody:
 
-    def __init__(self, inits=[20, 14, 5, 7, 1, 5], regs_w=ProportionalRegulator().Prop_reg()):
+    def __init__(self, inits=[20, 14, 5, 7, 1, 5], regs_w=ProportionalRegulator().get_TrFunc_proportional_regulator()):
         """
         :param inits: matrix of initial parameters
         :param regs_w: transmittion function of regulator

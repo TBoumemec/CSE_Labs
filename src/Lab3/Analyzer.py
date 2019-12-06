@@ -1,5 +1,4 @@
 from math import inf, log10, degrees
-
 from control import *
 from control.matlab import step, pzmap, bode
 from numpy.ma import arctan, mean

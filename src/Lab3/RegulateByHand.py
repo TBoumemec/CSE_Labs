@@ -32,16 +32,16 @@ def regulator_customization():
             Td = float(input("Введите коэфф Td: "))
             Tu = float(input("Введите коэфф Tu: "))
 
-            pid_regulator.set_regs(k, Td, Tu)
-            regs_w = pid_regulator.PID_reg()
+            pid_regulator.set_regulator_coefficients(k, Td, Tu)
+            regs_w = pid_regulator.get_TrFunc_pid_regulator()
 
         elif Reg_type == "Prop":
 
             print("k = ", k)
             k = float(input("\nВведите коэфф k: "))
 
-            p_regulator.set_regs(k)
-            regs_w = p_regulator.Prop_reg()
+            p_regulator.set_regulator_coefficients(k)
+            regs_w = p_regulator.get_TrFunc_proportional_regulator()
 
 
         grand_gear_function = SchemeBody(regs_w=regs_w)

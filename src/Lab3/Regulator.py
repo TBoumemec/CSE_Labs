@@ -13,19 +13,24 @@ class RegulatorBody:
         self.Td = Td
         self.Tu = Tu
 
-    def get_regulator_koeffs(self):
+    def get_regulator_coefficients(self):
 
         return self.k, self.Td, self.Tu
 
-    def set_regs(self, k=1, Td=1, Tu=1):
+    def set_regulator_coefficients(self, k=1, Td=1, Tu=1):
 
         self.k = k
         self.Td = Td
         self.Tu = Tu
 
+    def show_regulator_coefficients(self):
+        print("Пропорциональный коэффициент: ", str(self.k))
+        print("Дифференциальный коэффициент: ", str(self.Td))
+        print("Интегральный коэффициент: ", str(self.Tu))
+
 
 class ProportionalRegulator(RegulatorBody):
-    def Prop_reg(self):
+    def get_TrFunc_proportional_regulator(self):
         """
         definition for calculating transmission function of propotrional
         regulator type
@@ -38,7 +43,7 @@ class ProportionalRegulator(RegulatorBody):
 
 
 class PIDRegulator(RegulatorBody):
-    def PID_reg(self):
+    def get_TrFunc_pid_regulator(self):
         """
         definition for calculating transmission function of complex PID regulator type
         :return: transmission function
