@@ -1,10 +1,12 @@
-from random import random
+from numpy import random
 
-from control import tf, parallel
-from src.Lab3.Regulator import RegulatorBody
+from src.Lab3.Regulator import PIDRegulator
 
 
-class GeneticPIDRegulatorBody(RegulatorBody):
+class GeneticPIDRegulatorBody(PIDRegulator):
+    """
+    Здесь создано тело особи ПИД-регулятора
+    """
 
     def set_random_regs(self, n1=0.01, n2=5):
         """
