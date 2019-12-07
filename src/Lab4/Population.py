@@ -35,16 +35,13 @@ class PopulationBody:
         :param degree: лист с оценками
         :return: отсортированный лист и лучшая особь
         """
-        a = True
 
         # сортировка методом пузырька
-        while a:
-            a = False
         for i in range(len(self.pop_list)):
-            a = a or degree[i] > degree[i + 1]
-            if degree[i] < degree[i + 1]:
-                self.pop_list[i + 1], self.pop_list[i] = self.pop_list[i], self.pop_list[i + 1]
-                degree[i], degree[i + 1] = degree[i + 1], degree[i]
+            for j in range(len(self.pop_list)-i):
+                if degree[i] < degree[i + 1]:
+                    self.pop_list[i + 1], self.pop_list[i] = self.pop_list[i], self.pop_list[i + 1]
+                    degree[i], degree[i + 1] = degree[i + 1], degree[i]
 
         return self.pop_list, self.pop_list[0]
 
