@@ -8,7 +8,7 @@ class PopulationBody:
     Класс популяции
     """
 
-    def __init__(self, quantity=90):
+    def __init__(self, quantity=20):
         self.quantity = quantity
         self.pop_list = [GeneticPIDRegulatorBody() for i in range(quantity)]
 
@@ -18,7 +18,6 @@ class PopulationBody:
         :param new_pop_list:
         :return:
         """
-        assert type(new_pop_list) == GeneticPIDRegulatorBody, "Неверный тип, угроза ошибки"
         self.pop_list = new_pop_list
 
     def create_new_population(self):
@@ -26,6 +25,7 @@ class PopulationBody:
         создание новой популяции
         :return: будет возвращаться массив сгенерированных особей
         """
+        self.pop_list = [GeneticPIDRegulatorBody() for i in range(self.quantity)]
         for i in range(len(self.pop_list)):
             self.pop_list[i].set_random_regs()
 
@@ -37,13 +37,13 @@ class PopulationBody:
         """
 
         # сортировка методом пузырька
-        for i in range(len(self.pop_list)):
-            for j in range(len(self.pop_list)-i):
-                if degree[i] < degree[i + 1]:
-                    self.pop_list[i + 1], self.pop_list[i] = self.pop_list[i], self.pop_list[i + 1]
-                    degree[i], degree[i + 1] = degree[i + 1], degree[i]
+        for i in range(len(self.pop_list)-1):
+            for j in range(len(self.pop_list)-i-1):
+                if degree[j] < degree[j + 1]:
+                    self.pop_list[j + 1], self.pop_list[j] = self.pop_list[j], self.pop_list[j + 1]
+                    degree[j], degree[j + 1] = degree[j + 1], degree[j]
 
-        return self.pop_list, self.pop_list[0]
+        return self.pop_list[0], degree
 
     def pop_selection(self):
         """
@@ -65,8 +65,8 @@ class PopulationBody:
             # количество новых сгенерированных коэффициентов
             num = random.randint(1, 3)
             # А - список коэффициентов Кп, Кд и Ки для данного регулятора
-            A = mut_group[i].get_regulator_coefficients()
-            for i in range(len(num)):
+            A = list(mut_group[i].get_regulator_coefficients())
+            for i in range(num):
                 A[random.randint(0, 2)] = random.uniform(0.01, 5)
             mut_group[i].set_regulator_coefficients(k=A[0], Td=A[1], Tu=A[2])
 
@@ -87,7 +87,7 @@ class PopulationBody:
                      .get_regulator_coefficients())
 
             # А - список коэффициентов Кп, Кд и Ки для данного регулятора
-            A = breed_group[i].get_regulator_coefficients()
+            A = list(breed_group[i].get_regulator_coefficients())
 
             for i in range(len(A_get)):
                 num = random.randint(0, 2)
