@@ -350,3 +350,4 @@ class RegulatorAnalyzer:
         k.extend(self.get_bode_func())
 
         return k
+

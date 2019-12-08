@@ -38,7 +38,6 @@ class ProportionalRegulator(RegulatorBody):
         """
 
         w = tf([0, self.k], [0, 1])
-        print(w)
         return w
 
 
@@ -53,6 +52,5 @@ class PIDRegulator(RegulatorBody):
         w2 = tf([self.Td, 0], [0, 1])
         w3 = tf([0, 1], [self.Tu, 0])
         w = parallel(w1, w2, w3)
-        print(w)
 
         return w
