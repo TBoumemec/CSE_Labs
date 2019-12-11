@@ -59,14 +59,12 @@ class PopulationBody:
         """
 
         mut_group = list(self.pop_list[
-                         int(len(self.pop_list) // 1.6):len(self.pop_list)])
+                         int(len(self.pop_list) // 2):len(self.pop_list)])
 
         for i in range(len(mut_group)):
-            # количество новых сгенерированных коэффициентов
-            num = random.randint(1, 3)
             # А - список коэффициентов Кп, Кд и Ки для данного регулятора
             A = list(mut_group[i].get_regulator_coefficients())
-            for i in range(num):
+            for i in range(3):
                 A[random.randint(0, 2)] = random.uniform(0.01, 5)
             mut_group[i].set_regulator_coefficients(k=A[0], Td=A[1], Tu=A[2])
 
@@ -78,7 +76,7 @@ class PopulationBody:
         :return: новую дочернюю популяцию
         """
         breed_group = list(self.pop_list[
-                           len(self.pop_list) // 6:int(len(self.pop_list) // 1.6)])
+                           len(self.pop_list) // 3:int(len(self.pop_list) // 2)])
 
         for i in range(len(breed_group)):
 
