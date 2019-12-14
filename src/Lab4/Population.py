@@ -37,8 +37,8 @@ class PopulationBody:
         """
 
         # сортировка методом пузырька
-        for i in range(len(self.pop_list)-1):
-            for j in range(len(self.pop_list)-i-1):
+        for i in range(len(self.pop_list) - 1):
+            for j in range(len(self.pop_list) - i - 1):
                 if degree[j] < degree[j + 1]:
                     self.pop_list[j + 1], self.pop_list[j] = self.pop_list[j], self.pop_list[j + 1]
                     degree[j], degree[j + 1] = degree[j + 1], degree[j]
@@ -64,7 +64,7 @@ class PopulationBody:
         for i in range(len(mut_group)):
             # А - список коэффициентов Кп, Кд и Ки для данного регулятора
             A = list(mut_group[i].get_regulator_coefficients())
-            for i in range(3):
+            for j in range(3):
                 A[random.randint(0, 2)] = random.uniform(0.01, 5)
             mut_group[i].set_regulator_coefficients(k=A[0], Td=A[1], Tu=A[2])
 
@@ -87,7 +87,7 @@ class PopulationBody:
             # А - список коэффициентов Кп, Кд и Ки для данного регулятора
             A = list(breed_group[i].get_regulator_coefficients())
 
-            for i in range(len(A_get)):
+            for j in range(len(A_get)):
                 num = random.randint(0, 2)
                 # перемешиваются случайным образом
                 A[num] = A_get[num]

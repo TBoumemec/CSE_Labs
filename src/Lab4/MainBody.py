@@ -79,6 +79,7 @@ def genetic_method():
     axes.scatter(Kp, Kd, Ku)
     pylab.show()
 
+
 def ZN_Method():
     """
     Метод подбора параметров регулятора Зиглера-Николса
@@ -98,10 +99,10 @@ def ZN_Method():
     # калибровка регулятора, поиск критического состояния САУ
     while flag:
         poles, zeros = pzmap(w)
-        if poles !=[]:
+        if poles != []:
             # есть ли корень на границе устойчивости
             flag = find_sustainability(poles)
-        else: # poles=[]
+        else:  # poles=[]
             print("Корней нет!")
         if not flag: break
         k += 0.1
@@ -126,4 +127,4 @@ def ZN_Method():
     pass
 
 
-ZN_Method()
+genetic_method()

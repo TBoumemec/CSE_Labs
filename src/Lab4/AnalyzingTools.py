@@ -1,6 +1,7 @@
 from control.matlab import step
 from control import *
 
+
 def do_direct_method(w):
     """
     definition for analyzing regulator quality by step responce.
@@ -57,8 +58,8 @@ def do_direct_method(w):
     # ******************************
 
     """степень затухания и ее оценка"""
-    degree_of_attenuation = 1 - max(y2) / max(y1)*100
-    key_deg = get_degree(1/6.5, 1/degree_of_attenuation)
+    degree_of_attenuation = 1 - max(y2) / max(y1) * 100
+    key_deg = get_degree(1 / 6.5, 1 / degree_of_attenuation)
 
     for i in range(len(y1)):
         if 0.95 * last_y < y1[i] < 1.05 * last_y:
@@ -90,6 +91,7 @@ def do_direct_method(w):
 
     return [key_koleb, key_reg, key_per, key_deg,
             key_vel_max, key_vr_max, key_int]
+
 
 def find_sustainability(poles):
     """
