@@ -1,5 +1,4 @@
 from numpy import random
-
 from src.Lab4.Regulator import GeneticPIDRegulatorBody
 
 
@@ -25,7 +24,6 @@ class PopulationBody:
         создание новой популяции
         :return: будет возвращаться массив сгенерированных особей
         """
-        self.pop_list = [GeneticPIDRegulatorBody() for i in range(self.quantity)]
         for i in range(len(self.pop_list)):
             self.pop_list[i].set_random_regs()
 
@@ -47,17 +45,18 @@ class PopulationBody:
 
     def pop_selection(self):
         """
-        класс выполняет отбор лучших 30% особей
+        выполняет отбор лучших 30% особей
         :return: возвращает список лучших 30%
         """
         return self.pop_list[0:len(self.pop_list) // 3]
 
     def pop_mutation(self):
         """
-        класс выполняет мутацию 35% худших особей
+        выполняет мутацию 35% худших особей
         :return: мутировавшую популяцию
         """
 
+        # выборка из трети особей
         mut_group = list(self.pop_list[
                          int(len(self.pop_list) // 2):len(self.pop_list)])
 
@@ -72,26 +71,28 @@ class PopulationBody:
 
     def pop_breeding(self):
         """
-        класс выполняет скрещивание 35% особей средней оценки
+        выполняет скрещивание 35% особей средней оценки
         :return: новую дочернюю популяцию
         """
+
+        # выборка из трети особей
         breed_group = list(self.pop_list[
                            len(self.pop_list) // 3:int(len(self.pop_list) // 2)])
 
         for i in range(len(breed_group)):
 
-            # из случайного регулятора популяции в список A_get записываются коэффициенты
-            A_get = (breed_group[random.randint(0, len(breed_group))]
-                     .get_regulator_coefficients())
+            # из случайного регулятора популяции в список rand_A записываются коэффициенты
+            rand_A = (breed_group[random.randint(0, len(breed_group))]
+                      .get_regulator_coefficients())
 
-            # А - список коэффициентов Кп, Кд и Ки для данного регулятора
-            A = list(breed_group[i].get_regulator_coefficients())
+            # act_A - список коэффициентов Кп, Кд и Ки для данного регулятора
+            act_A = list(breed_group[i].get_regulator_coefficients())
 
-            for j in range(len(A_get)):
+            for j in range(len(rand_A)):
                 num = random.randint(0, 2)
                 # перемешиваются случайным образом
-                A[num] = A_get[num]
+                act_A[num] = rand_A[num]
 
-            breed_group[i].set_regulator_coefficients(k=A[0], Td=A[1], Tu=A[2])
+            breed_group[i].set_regulator_coefficients(k=act_A[0], Td=act_A[1], Tu=act_A[2])
 
         return breed_group

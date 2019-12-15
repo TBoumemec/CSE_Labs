@@ -89,46 +89,28 @@ def do_direct_method(w):
         integral_mean = integral_mean + abs(y1[t_vr_reg] - y1[i]) * t[1]
     key_int = get_degree(0.25, integral_mean)
 
+
+    # проверка системы на устойчивость
+    poles, zeros = pzmap(w, Plot=False)
+    if not is_sustainable(poles):
+        return [0]
+
     return [key_koleb, key_reg, key_per, key_deg,
             key_vel_max, key_vr_max, key_int]
 
 
-def find_sustainability(poles):
+def is_sustainable(poles):
     """
-    функция выявляет, есть ли во входящем массиве полюсов такие, которые находятся
-    на границе устойчивости
-    :param poles: полюса
-    :return: логическую переменную
+    функция определения устойчивости АСУ
+    :param poles: полюса системы
+    :return: true/false
     """
 
-    a = True
-    counter = 1
+    boo = True
 
-    print("Полюса плоскости: ")
-    for i in poles:
-        if -0.001 < i.real < 0.001:  # корень в левой полуплоскости
-            a = False
-        print("Полюс ", counter, " : ", i)
-        counter += 1
+    for pole in poles:
+        if pole.real > 0:
+            boo = False
+            break
 
-    print("Система на границе устойчивости" if not a else
-          "По критерию полюсов система устойчива")
-
-    return a
-
-
-def find_T(w):
-    """
-    функция находит и возвращает период переходной характеристики
-    """
-    t = np.linspace(0, stop=100, num=2000)
-
-    y1, t1 = step(w, t)
-
-    y2 = list(y1)
-    max1 = max(y2)
-    del y2[0:y2.index(max(y2))]
-    del y2[0:y2.index(min(y2))]
-    max2 = max(y2)
-
-    return max2 - max1
+    return boo
