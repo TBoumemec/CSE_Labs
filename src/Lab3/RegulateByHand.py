@@ -48,7 +48,7 @@ def regulator_customization():
 
         analyzer = RegulatorAnalyzer(w_f=grand_gear_function)
 
-        actual_keys.append(analyzer.get_trans_func())
+        actual_keys.append(analyzer.full_analyze())
 
         for key in actual_keys:
             print(key)

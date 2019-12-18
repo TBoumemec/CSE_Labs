@@ -44,6 +44,7 @@ class RegulatorAnalyzer:
 
         y1, t1 = step(self.w, self.t)
 
+        y1 = list(y1)
         max_y = max(y1)
         last_y = y1[-1]
 
@@ -60,22 +61,10 @@ class RegulatorAnalyzer:
         else:
             print("Показатель в норме")
 
-        y2 = list(y1)
-        y3 = list(y1)
-
         print("*" * 20, "\n"
-                        "Величина: " + str(max(y2)) + " и время достижения первого максимума: "
-              + str(self.t[y2.index(max(y2))]))
+                        "Величина: " + str(max(y1)) + " и время достижения первого максимума: "
+              + str(self.t[y1.index(max(y1))]))
 
-        # ******************************
-        # костыль, который помогает найти максимум второй вершины переходной характеристики
-        del y2[0:y2.index(max(y2))]
-        del y2[0:y2.index(min(y2))]
-        # ******************************
-
-        degree_of_attenuation = 1 - max(y2) / max(y1)
-        print("*" * 20, "\n"
-                        "Степень затухания составляет: ", degree_of_attenuation)
 
         for i in range(len(y1)):
             if 0.95 * last_y < y1[i] < 1.05 * last_y:
@@ -101,25 +90,25 @@ class RegulatorAnalyzer:
         if regulation_time > 17:
             key_reg = -1
 
+        two_maxes = []
         hills = 0
 
-        # грубый счетчик вершин
-        while True:
-            if max(y3) > 1.05 * last_y:  # нашел вершину и срезал массив до нее
-                del y3[0:y3.index(max(y3))]
-                hills += 1  # добавляет вершину
-            else:
-                break
-            if 0.95 * last_y > min(y3):  # нашел впадину и срезал массив до нее
-                del y3[0:y3.index(min(y3))]
-            else:  # больше нет ни вершин, ни впадин
-                break
-            if hills > 10:  # аномально большая выборка, нет смысла идти дальше
-                break
+        for num in range(len(y1[1:-1])):
+            print(num)
+            if y1[num - 1] < y1[num] > y1[num + 1]:
+                two_maxes.append(y1[num])
+                hills += 1
+            if hills == 10: break
+
+        degree_of_attenuation = 1 - two_maxes[1] / two_maxes[0]
+
+        print("*" * 20, "\n"
+                        "Степень затухания составляет: ", degree_of_attenuation)
+
 
         print("*" * 20, "\n"
                         "Колебательность составляет: ", hills, " вершин"
-                                                               " или ", max(y2) / max(y1) * 100, "%")
+                                                               " или ", two_maxes[1] / two_maxes[0] * 100, "%")
 
         if hills > 2:
             print("Полученная величина колебаний выше оптимальной области регулирования")
