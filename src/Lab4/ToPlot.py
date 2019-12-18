@@ -12,6 +12,8 @@ def plot_trans_func(w, toFindT=False, toPlotTrans=False):
 
     y1, t1 = step(w, t)
 
+    t=list(t)
+
     if toPlotTrans:
         plt.plot(t, y1, "r")
         plt.title('Step Response')
@@ -21,19 +23,14 @@ def plot_trans_func(w, toFindT=False, toPlotTrans=False):
         plt.show()
 
     if toFindT:
-        y2 = list(y1)
-        t2 = list(t)
-        max1 = t2[y2.index(max(y2))]
+        two_maxes = []
 
-        #******************
-        del t2[0:y2.index(max(y2))]
-        del y2[0:y2.index(max(y2))]
-        del t2[0:5]
-        del y2[0:5]
-        # ******************
+        for num in range(len(y1[1:-1])):
+            if y1[num - 1] < y1[num] > y1[num + 1]:
+                two_maxes.append(num)
+            if len(two_maxes) == 2: break
 
-        max2 = t2[y2.index(max(y2))]
-        return max2 - max1
+        return t[two_maxes[1]] - t[two_maxes[0]]
 
 
 def plot_3d(Kp, Kd, Ku):

@@ -5,6 +5,8 @@ from src.Lab4.ToAnalyze import do_direct_method, is_sustainable
 from src.Lab4.ToPlot import plot_trans_func, plot_3d
 from src.Lab3.Regulator import ProportionalRegulator, PIDRegulator
 from control.matlab import pzmap
+from control.matlab import step
+from control import *
 
 """
 Главное тело программы
@@ -40,10 +42,9 @@ def genetic_method():
     group.create_new_population()
 
     # оценка особей популяции
-    grades = target_function(group)
     best_of_the_best = []
 
-    while len(best_of_the_best) < 500:
+    while len(best_of_the_best) < 2000:
 
         grades = target_function(group)
         # сортировка и отбор лучшей особи
@@ -102,14 +103,44 @@ def ZN_Method():
 
         return a
 
-    k = 0
+    def second_var():
+        """
+        Второй способ релизации метода Зиглера-Никольса
+        :return: время западнывания tet, постоянную времени T и коэффициент передачи k
+        """
+        # получает передаточную функцию объекта управления
+        w = SchemeBody().get_scheme_solving()
+
+        t = np.linspace(0, stop=100, num=2000)
+
+        y1, t1 = step(w, t)
+
+        y1 = list(y1)
+        max_dif = 0
+        # номер элемента в списке, имеющего максимальную разницу с предыдущим
+        nmd = 0
+
+        for num, yy in enumerate(y1[1:]):
+            if (yy - y1[num]) > max_dif:
+                max_dif, nmd = (yy - y1[num]), (num + 1)
+                if y1[num - 1] < y1[num] > y1[num + 1]: # дошли до первого максимума, отбой
+                    break
+
+        # находим время запаздывания и постоянную времени через уравенение прямой
+        tet = -y1[nmd] / (y1[nmd] - y1[nmd - 1]) * (t[nmd] - t[nmd - 1]) + t[nmd]
+        T = (y1[-1] - y1[nmd]) / (y1[nmd] - y1[nmd - 1]) * (t[nmd] - t[nmd - 1]) + t[nmd]
+
+        return tet, T, y1[num]
+
+
+    Kk = 0
     flag = True
     # создаем объект пропорционального регулятора с начальными параметрами
     regulator = ProportionalRegulator()
 
     # калибровка регулятора, поиск критического состояния САУ
     while flag:
-        regulator.set_regulator_coefficients(k=k)
+        regulator.set_regulator_coefficients(k=Kk)
         # объект класса САУ
         grand_gear_function = SchemeBody(regs_w=regulator.get_TrFunc_proportional_regulator())
         # передаточная функция САУ с регулятором
@@ -120,17 +151,17 @@ def ZN_Method():
             # есть ли корень на границе устойчивости
             flag = is_on_border(poles)
         if not flag: break
-        k += 0.1
+        Kk += 0.1
 
-    print("Кп: ", round(k, 3))
+    print("Кп: ", round(Kk, 3))
     # находим период переходной характеристики
-    T = plot_trans_func(w, toPlotTrans=True, toFindT=True)
-    print("Период колебательной переходной характеристики: ", round(T, 6))
+    Tt = plot_trans_func(w, toPlotTrans=True, toFindT=True)
+    print("Период колебательной переходной характеристики: ", round(Tt, 6))
 
     # создаем новый объект ПИД-регулятора
     regulator = PIDRegulator()
     # устанавливаем параметры по методу Зиглера-Николса
-    regulator.set_regulator_coefficients(k=0.6 / k, Td=0.5 * T / k, Tu=0.125 * T / k)
+    regulator.set_regulator_coefficients(k=0.6* Kk, Td=3/40 * Tt * Kk, Tu=1.2 * Kk / Tt)
     grand_gear_function = SchemeBody(regs_w=regulator.get_TrFunc_pid_regulator())
     # передаточная функция САУ с регулятором
     w = grand_gear_function.get_scheme_solving()
@@ -139,9 +170,26 @@ def ZN_Method():
     if is_sustainable(poles):
         plot_trans_func(w, toPlotTrans=True)
         print("Оценка регулирования составляет: ", sum(do_direct_method(w)))
-
+        return
     else:
-        print("Система неустойчива!")
+        print("Система неустойчива! применим другой метод")
 
+    """ переходим к оценке по второму методу Зиглера-Никольса"""
+    tet, Tt, Kk = second_var()
+
+    # создаем новый объект ПИД-регулятора
+    regulator2 = PIDRegulator()
+    # устанавливаем параметры по методу Зиглера-Николса
+    regulator2.set_regulator_coefficients(k=1.2 * Tt / (Kk * tet), Td=1.2 * Tt / Kk, Tu=0.6 * Tt / (Kk * tet ** 2))
+    grand_gear_function = SchemeBody(regs_w=regulator2.get_TrFunc_pid_regulator())
+    # передаточная функция САУ с регулятором
+    w = grand_gear_function.get_scheme_solving()
+
+    poles, zeros = pzmap(w, Plot=False)
+    if is_sustainable(poles) and (0.15 < tet / Tt < 0.6):
+        plot_trans_func(w, toPlotTrans=True)
+        print("Оценка регулирования составляет: ", sum(do_direct_method(w)))
+    else:
+        print("Опять неудача!")
 
 genetic_method()
