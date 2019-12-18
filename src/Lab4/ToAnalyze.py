@@ -1,5 +1,6 @@
 from control.matlab import step
 from control import *
+from src.Lab4.ToPlot import plot_trans_func
 
 
 def do_direct_method(w):
@@ -20,17 +21,12 @@ def do_direct_method(w):
         :param actual: реальное значение
         :return: оценка
         """
-        if actual < ideal:
-            return 5
-        elif ideal < actual < 6 / 5 * ideal:
-            return 4
-        elif 6 / 5 * ideal < actual < 7 / 5 * ideal:
-            return 3
-        elif 7 / 5 * ideal < actual < 8 / 5 * ideal:
-            return 2
-        elif 8 / 5 * ideal < actual < 9 / 5 * ideal:
-            return 1
-        return 0
+        mas = [0, 1, 1.2, 1.4, 1.6, 1.8, 2]
+        for i in range(len(mas) - 1):
+            if mas[i] * ideal <= actual < mas[i + 1] * ideal:
+                return len(mas) - 2 - i
+            elif actual > mas[-1] * ideal:
+                return 0
 
     t = np.linspace(0, stop=100, num=2000)
 
@@ -38,28 +34,34 @@ def do_direct_method(w):
 
     y1, t1 = step(w, t)
 
+    y1 = list(y1)
     max_y = max(y1)
     last_y = y1[-1]
 
     """перерегулирование и его оценка"""
     overshoot = (max_y - last_y) / last_y
-    key_per = get_degree(10, overshoot)
-
-    y2 = list(y1)
+    key_per = get_degree(27, overshoot)
 
     """величина и время достижения первого максимума и их оценка"""
-    key_vel_max = get_degree(1.0914, max(y2))
-    key_vr_max = get_degree(0.8, t[y2.index(max(y2))])
+    key_vel_max = get_degree(1.1, max(y1))
+    key_vr_max = get_degree(1, t[y1.index(max(y1))])
 
-    # ******************************
-    # костыль, который помогает найти максимум второй вершины переходной характеристики
-    del y2[0:y2.index(max(y2))]
-    del y2[0:y2.index(min(y2))]
-    # ******************************
+    two_maxes = []
+
+    for num in range(len(y1[1:-1])):
+        if y1[num - 1] < y1[num] > y1[num + 1]:
+            two_maxes.append(y1[num])
+        if len(two_maxes) == 10: break
 
     """степень затухания и ее оценка"""
-    degree_of_attenuation = 1 - max(y2) / max(y1) * 100
-    key_deg = get_degree(1 / 6.5, 1 / degree_of_attenuation)
+    if len(two_maxes) <= 1:
+        key_deg = 5.0
+    else:
+        degree_of_attenuation = (1 - two_maxes[1] / two_maxes[0]) * 100
+        if degree_of_attenuation <=0:
+            key_deg = -1
+        else: key_deg = get_degree(1 / 6.6, 1 / degree_of_attenuation)
+
 
     for i in range(len(y1)):
         if 0.95 * last_y < y1[i] < 1.05 * last_y:
@@ -78,22 +80,27 @@ def do_direct_method(w):
             counter = 0
 
     """оценка времени регулирования"""
-    key_reg = get_degree(5, regulation_time)
-
-    koleb = max(y2) / max(y1) * 100
+    key_reg = get_degree(15, regulation_time)
 
     """оценка показателя колебательности"""
-    key_koleb = get_degree(0.8, koleb)
+    if len(two_maxes) <= 1:
+        key_koleb = 5.0
+    else:
+        koleb = two_maxes[1] / two_maxes[0] * 100
+        key_koleb = get_degree(1.19, koleb)
+
+
+
     """интеграл и его оценка"""
     for i in range(0, t_vr_reg):
         integral_mean = integral_mean + abs(y1[t_vr_reg] - y1[i]) * t[1]
-    key_int = get_degree(0.25, integral_mean)
+    key_int = get_degree(0.3, integral_mean)
 
 
     # проверка системы на устойчивость
     poles, zeros = pzmap(w, Plot=False)
     if not is_sustainable(poles):
-        return [0]
+        return [-100]
 
     return [key_koleb, key_reg, key_per, key_deg,
             key_vel_max, key_vr_max, key_int]

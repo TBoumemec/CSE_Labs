@@ -29,6 +29,16 @@
 # for i in range(len(mas)-1):
 #
 #     if mas[i] * ideal < actual < mas[i + 1] * ideal:
-#         return len(mas) - 2 - i
+#         return len(mas) - 1 - i
 #     elif actual>mas[-1]*ideal:
-#         return -1
+#         return 0
+
+
+# two_maxes = []
+# counter = 0
+#
+# for num, mag in enumerate(y1[1:-1]):
+#     if mag[num - 1] < mag > mag[num + 1]:
+#         two_maxes += mag
+#         counter += 1
+#     if len(two_maxes) == 2: break

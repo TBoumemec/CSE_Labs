@@ -1,5 +1,4 @@
 from numpy import random
-
 from src.Lab3.Regulator import PIDRegulator
 
 

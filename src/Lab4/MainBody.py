@@ -1,5 +1,4 @@
 from numpy import size
-
 from src.Lab3.Scheme import SchemeBody
 from src.Lab4.Population import PopulationBody
 from src.Lab4.ToAnalyze import do_direct_method, is_sustainable
@@ -44,11 +43,9 @@ def genetic_method():
     grades = target_function(group)
     best_of_the_best = []
 
-    while max(grades) <= 34:
+    while len(best_of_the_best) < 500:
 
         grades = target_function(group)
-        if len(best_of_the_best) >= 500:
-            break
         # сортировка и отбор лучшей особи
         best_person, deg = group.sort_and_take_best(grades)
         best_of_the_best.append(best_person)
@@ -119,17 +116,16 @@ def ZN_Method():
         w = grand_gear_function.get_scheme_solving()
 
         poles, zeros = pzmap(w, Plot=False)
-        # ПОПРОБОВАТЬ УПРОСТИТЬ ЧЕРЕЗ TRY****************
         if size(poles) > 0:
             # есть ли корень на границе устойчивости
             flag = is_on_border(poles)
         if not flag: break
         k += 0.1
 
-    print("Кп: ", round(k,3))
+    print("Кп: ", round(k, 3))
     # находим период переходной характеристики
     T = plot_trans_func(w, toPlotTrans=True, toFindT=True)
-    print("Период колебательной переходной характеристики: ", round(T,6))
+    print("Период колебательной переходной характеристики: ", round(T, 6))
 
     # создаем новый объект ПИД-регулятора
     regulator = PIDRegulator()
@@ -144,8 +140,8 @@ def ZN_Method():
         plot_trans_func(w, toPlotTrans=True)
         print("Оценка регулирования составляет: ", sum(do_direct_method(w)))
 
-    else: print("Система неустойчива!")
-
+    else:
+        print("Система неустойчива!")
 
 
 genetic_method()

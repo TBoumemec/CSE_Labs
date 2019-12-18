@@ -1,9 +1,6 @@
 from control.matlab import step
 from control import *
 import matplotlib.pyplot as plt
-import pylab
-from mpl_toolkits.mplot3d import Axes3D
-import pandas as pd
 import plotly
 import plotly.graph_objs as go
 
